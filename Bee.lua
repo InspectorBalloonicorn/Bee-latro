@@ -253,10 +253,10 @@ SMODS.Sticker {
 ----------Defining Consumables------------------
 
 SMODS.Consumable {
-	key = "egregore",
+	key = "infestation",
 	set = "Spectral",
 	atlas = 'beemiscatlas',
-	pos = { x = 2, y = 0 },
+	pos = { x = 3, y = 0 },
 	cost = 3,
 	loc_vars = function (self, info_queue)
 		info_queue[#info_queue + 1] = { key = "bee_apian", set = "Other", vars = {} }
