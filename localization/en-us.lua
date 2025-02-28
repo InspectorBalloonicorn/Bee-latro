@@ -234,8 +234,8 @@ return {
         },
         Planet={},
         Spectral={
-			c_bee_egregore = {
-				name = "Egregore",
+			c_bee_infestation = {
+				name = "Infestation",
 				text = {
 					"Select a {C:attention}Joker{}",
 					" to make {C:attention}Apian{}",
