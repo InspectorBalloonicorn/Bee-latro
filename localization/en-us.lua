@@ -264,6 +264,16 @@ return {
 				},
 			},
 		},
+		Code={
+			c_bee_bug = {
+				name = "://BUG",
+				text = {
+					"Select a {C:attention}Joker{}",
+					" to make {C:attention}Apian{},",
+					" {C:attention}Flickering{}, and {C:attention}Glitched{}",
+				},
+			},
+		},
         Stake={},
         Tag={},
         Tarot={},

@@ -16,3 +16,4 @@ Kryppe - Jimbee Joker Art, Big Bee Joker Art
 Unexian - Bee's Knees Art (Partial)
 George the Rat - Ctrl + Bee Art, Larva Art, Honeycomb Art
 Shadow - Beehive Art, Ball of Bees Art
+Mr. Dingus - Coding Contributions

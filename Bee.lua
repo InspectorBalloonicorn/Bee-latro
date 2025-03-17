@@ -506,6 +506,84 @@ SMODS.Consumable {
 
 }
 
+SMODS.Consumable {
+	key = "bug",
+	set = "Code",
+	name = "c_bee_bug",
+	atlas = 'beemiscatlas',
+	pos = { x = 1, y = 0 },
+	cost = 3,
+	loc_vars = function (self, info_queue, center)
+		info_queue[#info_queue + 1] = { key = "bee_apian", set = "Other", vars = {} }
+		info_queue[#info_queue + 1] = { key = "cry_flickering", set = "Other", vars = {5,5}}
+	end,
+	can_use = function(self, card)
+		return #G.jokers.highlighted == 1
+	end,
+	use = function(self, card, area, copier)
+		local used_consumable = copier or card
+		local highlighted = G.jokers.highlighted[1]
+		--flip card
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			delay = 0.1,
+			func = function()	
+				if highlighted then				
+					highlighted:flip()
+				end
+				return true
+			end,
+		}))
+		--add stickers to joker
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			delay = 0.1,
+			func = function()
+				if highlighted then
+					if not highlighted:is_bee() then 
+						highlighted.ability.bee_apian = true
+					end	
+					highlighted.ability.cry_flickering = true
+				end
+				return true
+			end,
+		}))
+
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			delay = 0.1,
+			func = function()	
+				if highlighted then				
+					highlighted:flip()
+				end
+				return true
+			end,
+		}))
+
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			delay = 0.1,
+			func = function()	
+				if highlighted then				
+					highlighted:set_edition({ cry_glitched = true })
+				end
+				return true
+			end,
+		}))
+	end,
+	cry_credits = {
+		idea = {
+			"Mr. Dingus",
+		},
+		art = {
+			"Inspector_B",
+		},
+		code = {
+			"Mr. Dingus",
+		},
+	},
+}
+
 ----------Defining Jokers------------------
 
 SMODS.Joker {
@@ -1044,7 +1122,7 @@ SMODS.Joker {
 				"Inspector_B"
 			},
 			art = {
-				"Glitchkat10"
+				"Shadow"
 			},
 			code = {
 				"Inspector_B"
