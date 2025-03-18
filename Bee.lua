@@ -1716,5 +1716,113 @@ SMODS.Joker {
 			}
 		},
 }
+
+SMODS.Joker {
+	key = 'honeydrops',
+	config = { extra = {bee = true, chips = 50, chip_mod = -5, total_bees = 0, last_threshold = 50, bold = 2} },
+	rarity = "cry_candy",
+	atlas = 'beeatlas',
+	blueprint_compat = false,
+	pools = {["Bee"] = true},
+	pos = { x = 5, y = 2 },
+	cost = 8,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card and card.ability.extra.chips, card and card.ability.extra.chip_mod, card and card.ability.extra.total_bees} }
+	end,
+	calculate = function(self, card, context)
+		if context.after and not context.repetition then
+			-- Store the previous chip value before modification
+			local previous_chips = card.ability.extra.chips
+	
+			-- Apply the chip modifier to the chips value
+			card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+	
+			-- Check if we crossed a multiple of 10 threshold (i.e., from 45 to 40, 35 to 30, etc.)
+			-- Calculate the previous and new multiples of 10
+			local prev_multiple_of_10 = math.floor(previous_chips / 10) * 10
+			local new_multiple_of_10 = math.floor(card.ability.extra.chips / 10) * 10
+	
+			-- If we crossed into a new multiple of 10, increment total_bees
+			if new_multiple_of_10 < prev_multiple_of_10 then
+				-- Increment the total_bees for each crossed multiple of 10
+				local crossed_thresholds = (prev_multiple_of_10 - new_multiple_of_10) / 10
+				card.ability.extra.total_bees = (card.ability.extra.total_bees or 0) + crossed_thresholds
+	
+				-- Display "Bee Added" message
+				card_eval_status_text(
+					card,
+					"extra",
+					nil,
+					nil,
+					nil,
+					{
+						message = "Bee Added",  -- Display the message when a bee is added
+					}
+				)
+			end
+	
+			-- Display evaluation message (for chips)
+			card_eval_status_text(
+				card,
+				"extra",
+				nil,
+				nil,
+				nil,
+				{
+					message = localize({ type = "variable", key = "a_chips", vars = { card.ability.extra.chip_mod } }),
+				}
+			)
+		end
+
+		if card.ability.extra.chips <= 0 then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					play_sound('tarot1')
+					card.T.r = -0.2
+					card:juice_up(0.3, 0.4)
+					card.states.drag.is = true
+					card.children.center.pinch.x = true
+					-- This part destroys the card.
+					G.E_MANAGER:add_event(Event({
+						trigger = 'after',
+						delay = 0.3,
+						blockable = false,
+						func = function()
+							G.jokers:remove_card(card)
+							card:remove()
+							card = nil
+							return true;
+						end
+					}))
+					return true
+			end
+			}))
+			return {
+				message = 'Eaten!'
+			}
+		end
+		
+		if context.joker_main then
+			if card.ability.extra.chips > 0 then
+				return {
+					chip_mod = card.ability.extra.chips,
+					message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } }
+				}
+			end
+		end
+
+	end,
+    cry_credits = {
+			idea = {
+				"MarioFan597"
+			},
+			art = {
+				"Placeholder"
+			},
+			code = {
+				"Inspector_B"
+			}
+		},
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
