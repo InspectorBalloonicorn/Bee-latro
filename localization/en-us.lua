@@ -114,9 +114,9 @@ return {
         j_bee_jollybee = {
             name = 'Jollybee',
 		    text = {
-                "If played hand contains a {C:attention}Pair{}, this gains",
-			    "{C:mult}+#2#{} Mult for each {C:attention}Bee Joker{} you have",
-			    "{C:inactive}(Currently {C:mult}+#1# {C:inactive}Mult)",
+                "Once every 5 rounds minus your {C:attention}Bee Jokers{},",
+			    "if played hand is a {C:attention}Pair{}, make scored cards {C:attention}Jolly{}",
+			    "{C:inactive}(Rounds left till active = #1#)",
 			    "{C:inactive}This counts as a Bee Joker"
 		    }
         },
@@ -203,10 +203,10 @@ return {
         	name = 'Honey Drops',
         	text = {
 			    "{C:chips}+#1#{} Chips",
-                "After you play a hand, {C:chips}#2#{} Chips",
-                "Each time the chips drop below a multiple of 10,",
+                "After you play a hand, {C:chips}-#2#{} Chips",
+                "Each time this card's chips drops below a multiple of 10,",
 				"this counts as an additional {C:attention}Bee Joker{}",
-				"(Currently #3# Bees)"
+				"{C:inactive}(Currently #3# Bees)"
 		    }
         }
 

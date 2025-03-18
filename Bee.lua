@@ -152,6 +152,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+	key = "beeatlas2",
+	path = "beeatlas2.png",
+	px = 71,
+	py = 95
+}
+
+SMODS.Atlas {
 	key = "beepackatlas",
 	path = "beepackatlas.png",
 	px = 71,
@@ -1132,37 +1139,53 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'jollybee',
-	config = { extra = { mult = 0, mult_mod = 2, bee = true, bold = 5} },
+	config = { extra = { rounds = 1, active = false, bee = true, bold = 5} },
 	rarity = 2,
 	atlas = 'beeatlas',
 	pos = { x = 5, y = 0 },
 	cost = 5,
 	pools = {["Bee"] = true},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card and card.ability.extra.mult, card and card.ability.extra.mult_mod, card and card.ability.extra.bee, card and card.ability.extra.bold } }
+		return { vars = { card and card.ability.extra.rounds, card and card.ability.extra.active }}
 	end,
 	calculate = function(self, card, context)
-		if context.before and next(context.poker_hands['Pair']) and not context.blueprint then
-			local beeCount = GetBees()
-
-			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod * beeCount
-			card_eval_status_text(
-					card,
-					"extra",
-					nil,
-					nil,
-					nil,
-					{
-						message = localize({ type = "variable", key = "a_mult", vars = { card.ability.extra.mult_mod * beeCount} }),
-						colour = G.C.MULT,
-					})
+		if card.ability.extra.rounds == 0
+		then
+			card.ability.extra.active = true
 		end
 
-		if context.joker_main then
-			return {
-				mult_mod = card.ability.extra.mult,
-                message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } }
-			}
+		if
+			context.cardarea == G.jokers
+			and context.before
+			and not context.blueprint_card
+			and not context.retrigger_joker
+		then
+			if context.scoring_name == "Pair" and card.ability.extra.active
+			then
+				for i = 1, #context.scoring_hand do
+					local _card = context.scoring_hand[i]
+					_card:set_edition({ cry_m = true })
+
+				G.E_MANAGER:add_event(Event({
+					delay = 0.6,
+					func = function()	
+						_card:juice_up()
+						play_sound("tarot1")
+						return true
+					end,
+				}))
+				end
+
+				local beeCount = GetBees()
+				card.ability.extra.rounds = math.max(1, (5 - beeCount))
+				card.ability.extra.active = false
+			end
+		end	
+
+		if 
+			context.end_of_round and not context.individual and not context.repetition and not context.blueprint and card.ability.extra.rounds > 0
+		then
+			card.ability.extra.rounds = card.ability.extra.rounds - 1
 		end
     end,
     cry_credits = {
@@ -1719,12 +1742,12 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'honeydrops',
-	config = { extra = {bee = true, chips = 50, chip_mod = -5, total_bees = 0, last_threshold = 50, bold = 2} },
+	config = { extra = {bee = true, chips = 50, chip_mod = 5, total_bees = 0, last_threshold = 50, bold = 2} },
 	rarity = "cry_candy",
-	atlas = 'beeatlas',
+	atlas = 'beeatlas2',
 	blueprint_compat = false,
 	pools = {["Bee"] = true},
-	pos = { x = 5, y = 2 },
+	pos = { x = 0, y = 0 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card and card.ability.extra.chips, card and card.ability.extra.chip_mod, card and card.ability.extra.total_bees} }
@@ -1735,7 +1758,7 @@ SMODS.Joker {
 			local previous_chips = card.ability.extra.chips
 	
 			-- Apply the chip modifier to the chips value
-			card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+			card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_mod
 	
 			-- Check if we crossed a multiple of 10 threshold (i.e., from 45 to 40, 35 to 30, etc.)
 			-- Calculate the previous and new multiples of 10
@@ -1769,7 +1792,7 @@ SMODS.Joker {
 				nil,
 				nil,
 				{
-					message = localize({ type = "variable", key = "a_chips", vars = { card.ability.extra.chip_mod } }),
+					message = localize({ type = "variable", key = "a_chips_minus", vars = { card.ability.extra.chip_mod } }),
 				}
 			)
 		end
@@ -1817,7 +1840,7 @@ SMODS.Joker {
 				"MarioFan597"
 			},
 			art = {
-				"Placeholder"
+				"MarioFan597"
 			},
 			code = {
 				"Inspector_B"
