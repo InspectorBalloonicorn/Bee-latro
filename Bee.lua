@@ -1715,7 +1715,7 @@ SMODS.Joker {
 }
 SMODS.Joker {
 	key = 'trenchcoat',
-	config = { extra = {bee = true, total_bees = 41290, bold = 2} },
+	config = { extra = {bee = true, total_bees = 4129, bold = 2} },
 	rarity = "cry_exotic",
 	atlas = 'beeatlas',
 	blueprint_compat = false,
@@ -1837,7 +1837,7 @@ SMODS.Joker {
 	end,
     cry_credits = {
 			idea = {
-				"MarioFan597"
+				"Luigicat11"
 			},
 			art = {
 				"MarioFan597"

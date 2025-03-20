@@ -192,7 +192,7 @@ return {
 		    }
         },
         j_bee_trenchcoat = {
-        	name = '(XLI)CCXC Apes in Tunica',
+        	name = 'MMMMCXXIX Apes in Tunica',
         	text = {
 			    "This counts as",
                 "{C:attention}#1# Bees{}",
@@ -207,6 +207,16 @@ return {
                 "Each time this card's chips drops below a multiple of 10,",
 				"this counts as an additional {C:attention}Bee Joker{}",
 				"{C:inactive}(Currently #3# Bees)"
+		    }
+        },
+        j_bee_freebee = {
+        	name = 'Freebee (Temp)',
+        	text = {
+                "Gains {C:money}${} for each bee at end of round",
+                "Makes a coupon tag at {C:money}$20{}",
+                "in exchange for stored {C:money}${}",
+				"{C:inactive}(Currently holding{} {C:money}$#1#{})",
+				"{C:inactive}This counts as a Bee Joker"
 		    }
         }
 
