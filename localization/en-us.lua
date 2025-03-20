@@ -114,9 +114,9 @@ return {
         j_bee_jollybee = {
             name = 'Jollybee',
 		    text = {
-                "Once every 5 rounds minus your {C:attention}Bee Jokers{},",
-			    "if played hand is a {C:attention}Pair{}, make scored cards {C:attention}Jolly{}",
-			    "{C:inactive}(Rounds left till active = #1#)",
+                "If played hand is a {C:attention}Pair{}, make scored cards {C:attention}Jolly{}",
+				"Needs {C:attention}(5 - Bees){} rounds to recharge",
+			    "{C:inactive}(Rounds left until active: #1#)",
 			    "{C:inactive}This counts as a Bee Joker"
 		    }
         },

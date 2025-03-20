@@ -1139,7 +1139,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'jollybee',
-	config = { extra = { rounds = 1, active = false, bee = true, bold = 5} },
+	config = { extra = { rounds = 0, active = false, bee = true, bold = 5, isJiggling = false} }, --check exists to prevent constant overjiggling
 	rarity = 2,
 	atlas = 'beeatlas',
 	pos = { x = 5, y = 0 },
@@ -1152,6 +1152,14 @@ SMODS.Joker {
 		if card.ability.extra.rounds == 0
 		then
 			card.ability.extra.active = true
+			if not card.ability.extra.isJiggling 
+			then
+				local eval = function(card)
+					return card.ability.extra.active
+				end
+				juice_card_until(card, eval, false)
+				card.ability.extra.isJiggling = true
+			end
 		end
 
 		if
@@ -1162,6 +1170,15 @@ SMODS.Joker {
 		then
 			if context.scoring_name == "Pair" and card.ability.extra.active
 			then
+				card_eval_status_text(
+				card,
+				"extra",
+				nil,
+				nil,
+				nil,
+				{ message = "M!" }
+				)
+				
 				for i = 1, #context.scoring_hand do
 					local _card = context.scoring_hand[i]
 					_card:set_edition({ cry_m = true })
@@ -1174,11 +1191,12 @@ SMODS.Joker {
 						return true
 					end,
 				}))
-				end
+				end				
 
 				local beeCount = GetBees()
 				card.ability.extra.rounds = math.max(1, (5 - beeCount))
 				card.ability.extra.active = false
+				card.ability.extra.isJiggling = false
 			end
 		end	
 
